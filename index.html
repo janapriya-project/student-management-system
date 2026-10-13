@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #244477;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #2457c5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 4px;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #2457c5;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Student Management System</h1>
+
+    <h2>Add Student</h2>
+
+    <form id="studentForm">
+        <input id="studentId" placeholder="Student ID" required>
+        <input id="studentName" placeholder="Student Name" required>
+        <input id="studentDept" placeholder="Department" required>
+
+        <button type="submit">Add Student</button>
+    </form>
+
+    <h2>Student Records</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="studentTable">
+            <tr id="emptyRow">
+                <td colspan="4">No students added</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const form = document.getElementById("studentForm");
+    const table = document.getElementById("studentTable");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const id = document.getElementById("studentId").value.trim();
+        const name = document.getElementById("studentName").value.trim();
+        const dept = document.getElementById("studentDept").value.trim();
+
+        const emptyRow = document.getElementById("emptyRow");
+        if (emptyRow) {
+            emptyRow.remove();
+        }
+
+        const row = document.createElement("tr");
+
+        [id, name, dept].forEach(function(value) {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "Delete";
+        deleteButton.type = "button";
+        deleteButton.className = "delete";
+
+        deleteButton.addEventListener("click", function() {
+            row.remove();
+
+            if (table.querySelectorAll("tr").length === 0) {
+                const newRow = table.insertRow();
+                newRow.id = "emptyRow";
+
+                const cell = newRow.insertCell();
+                cell.colSpan = 4;
+                cell.textContent = "No students added";
+            }
+        });
+
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+        table.appendChild(row);
+
+        form.reset();
+    });
+</script>
+
+</body>
+</html>
